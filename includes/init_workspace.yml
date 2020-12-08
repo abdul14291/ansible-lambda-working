@@ -1,0 +1,73 @@
+# - name: remove workspace dir
+#   file:
+#     path: workspace/
+#     state: absent
+#     force: yes
+
+# - name: create workspace dir
+#   file:
+#     path: workspace/
+#     state: directory
+
+- name: install dependencies
+  pip:
+    requirements: '{{ packages_dir }}'
+    virtualenv: '{{ virenv_path }}'
+    virtualenv_python: python3.6
+  
+# - name: copy in code from packages to workspace
+#   synchronize:
+#     src: '{{ data_path }}'
+#     dest: '{{ code_path }}'
+#     delete: yes
+
+- name: copy python file mainfile
+  synchronize:
+    src: demo.py
+    dest: '{{ data_path }}'
+    delete: yes
+
+# - name: remove dist files in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/*dist-info
+
+# - name: remove dist _distutils_hack in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/_distutils_hack
+
+# - name: remove chardet in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/chardet
+
+# - name: remove setuptools in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/setuptools
+
+# - name: remove wheel in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/wheel
+
+# - name: remove _virtualenv.py in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/_virtualenv.py
+
+# - name: remove distutils-precedence.pth in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/distutils-precedence.pth
+
+# - name: remove easy_install.py in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/easy_install.py
+
+# - name: remove pip-20.2.4.virtualenv in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/pip-20.2.4.virtualenv
+
+# - name: remove setuptools-50.3.2.virtualenv in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/setuptools-50.3.2.virtualenv
+
+# - name: remove wheel-0.35.1.virtualenv in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/wheel-0.35.1.virtualenv
+
+# - name: remove pip files in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/pip
+
+# - name: remove pkg files in temp deploy dir & other pip packages
+#   shell: rm -rf {{data_path}}/pkg_resources
+
+# - name: remove python cache
+#   shell: rm -rf {{data_path}}/__pycache__
+
+# - name: Remove *.pyc files under all
+#   shell: find {{data_path}} -name \*.pyc -delete

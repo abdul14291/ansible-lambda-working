@@ -1,0 +1,19 @@
+- name: Create zip archive
+  archive:
+    # path: /home/abdul/Ansible/test/workspace/
+    path: /home/abdul/Ansible/test/packages/lib/python3.6/site-packages/
+    dest: /home/abdul/Ansible/test/build/{{zip_name}}
+    format: zip
+
+- name: Create empty buckets for Zip
+  s3_bucket:
+    name:  '{{s3_bucket}}'
+    state: present
+
+- name: Upload to s3
+  aws_s3:
+    bucket: '{{s3_bucket}}'
+    object: '{{s3_folder}}/{{zip_name}}'
+    src: /home/abdul/Ansible/test/build/{{ zip_name }}
+    mode: put
+    profile: '{{aws_profile}}'

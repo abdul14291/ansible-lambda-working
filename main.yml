@@ -1,0 +1,53 @@
+---
+- hosts: localhost
+  strategy: free
+  connection: local
+  gather_facts: False
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    aws_region: us-east-2
+    s3_bucket: indore-demo
+    s3_folder: indore-mp-demo
+    packages_dir: /home/abdul/Ansible/test/requirements.txt
+    virenv_path: /home/abdul/Ansible/test/packages
+    data_path: packages/lib/python3.6/site-packages/
+    # code_path: /home/abdul/Ansible/test/workspace/
+    zip_name: ansible.zip
+    aws_profile: default
+
+    lambda_timeout: 300
+    lambda_memory: 2048
+    lambda_iam_role: arn:aws:iam::488397605401:role/lambda-ansible
+
+  tasks:
+    - include: includes/init_workspace.yml
+    - include: includes/copy_to_s3.yml
+
+    - name: Deploy through S3
+      lambda:
+        name: function1
+        profile: "{{aws_profile}}"
+        s3_bucket: "{{s3_bucket}}"
+        s3_key: "{{s3_folder}}/{{zip_name}}"
+        region: us-east-2
+        runtime: python3.6
+        role: "{{lambda_iam_role}}"
+        handler: demo.lambda_handler
+        timeout: "{{lambda_timeout}}"
+        memory_size: "{{lambda_memory}}"
+
+    - name: Lambda Direct Deploy
+      lambda:
+        name: function2
+        profile: "{{aws_profile}}"
+        zip_file: /home/abdul/Ansible/test/build/{{zip_name}}
+        region: us-east-2
+        runtime: python3.6
+        role: "{{lambda_iam_role}}"
+        handler: demo.lambda_handler
+        timeout: "{{lambda_timeout}}"
+        memory_size: "{{lambda_memory}}"
+
+    # - name: Clean Up
+    #   shell: rm -rf {{zip_name}} *.retry {{workspace}}

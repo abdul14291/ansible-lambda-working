@@ -1,0 +1,8 @@
+requests==2.25.0
+# elasticsearch==7.10.0
+# simplejson==3.17.2
+# boto3==1.16.30
+# bson==0.5.10
+# aws-requests-auth==0.4.3
+# p_tqdm
+# p_tqdm
